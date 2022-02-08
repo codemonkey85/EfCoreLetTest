@@ -1,5 +1,5 @@
-﻿using EfCoreLetTest;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 const string connectionString = @"Data Source=mydb.db";
 
@@ -31,4 +31,21 @@ var query = from t in dbContext.ToDos
 foreach (var todo in query.ToArray())
 {
     Console.WriteLine(todo);
+}
+
+public record ToDo([property: Key] long Id, string TaskTitle);
+
+public class ApplicationDatabaseContext : DbContext
+{
+    public ApplicationDatabaseContext(DbContextOptions options) : base(options)
+    {
+
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+    }
+
+    public DbSet<ToDo> ToDos { get; set; }
 }
